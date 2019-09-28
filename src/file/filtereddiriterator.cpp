@@ -56,6 +56,7 @@ QString FilteredDirIterator::next()
         return m_filePath;
     }
 
+try_next:
     m_filePath.clear();
     if (!m_currentIter) {
         m_fileInfo = QFileInfo();
@@ -83,7 +84,7 @@ QString FilteredDirIterator::next()
             m_paths.push(m_filePath);
             return m_filePath;
         } else {
-            return next();
+            goto try_next;
         }
     }
     else if (m_fileInfo.isFile()) {
@@ -96,11 +97,11 @@ QString FilteredDirIterator::next()
         if (shouldIndexFile) {
             return m_filePath;
         } else {
-            return next();
+            goto try_next;
         }
     }
     else {
-        return next();
+        goto try_next;
     }
 }
 
