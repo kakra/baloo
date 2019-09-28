@@ -135,7 +135,7 @@ bool Database::open(OpenMode mode)
     mdb_env_set_mapsize(m_env, maximalSizeInBytes);
 
     // Set MDB envoironment flags
-    auto mdbEnvFlags = MDB_NOSUBDIR | MDB_NOMEMINIT | MDB_NORDAHEAD;
+    auto mdbEnvFlags = MDB_NOSUBDIR | MDB_NOMEMINIT | MDB_NORDAHEAD | MDB_NOSYNC;
     if (mode == ReadOnlyDatabase) mdbEnvFlags |= MDB_RDONLY;
 
     // The directory needs to be created before opening the environment
