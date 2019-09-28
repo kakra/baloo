@@ -122,16 +122,16 @@ bool Database::open(OpenMode mode)
      * Valgrind by default (without recompiling) limits the mmap size:
      * <= 3.9: 32 GByte, 3.9 to 3.12: 64 GByte, 3.13: 128 GByte
      */
-    size_t sizeInGByte = 256;
+    size_t sizeInGByte = 16;
     if (sizeof(void*) == 4) {
         sizeInGByte = 1;
         qCWarning(ENGINE) << "Running on 32 bit arch, limiting DB mmap to" << sizeInGByte << "GByte";
     } else if (RUNNING_ON_VALGRIND) {
         // valgrind lacks a runtime version check, assume valgrind >= 3.9, and allow for some other mmaps
-        sizeInGByte = 40;
+        sizeInGByte = 8;
         qCWarning(ENGINE) << "Valgrind detected, limiting DB mmap to" << sizeInGByte << "GByte";
     }
-    const size_t maximalSizeInBytes = sizeInGByte * size_t(1024) * size_t(1024) * size_t(1024);
+    const size_t maximalSizeInBytes = sizeInGByte << 30;
     mdb_env_set_mapsize(m_env, maximalSizeInBytes);
 
     // Set MDB envoironment flags
